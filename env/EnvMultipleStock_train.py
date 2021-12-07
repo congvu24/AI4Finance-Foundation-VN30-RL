@@ -14,10 +14,10 @@ HMAX_NORMALIZE = 100
 # initial amount of money we have in our account
 INITIAL_ACCOUNT_BALANCE=1000000
 # total number of stocks in our portfolio
-STOCK_DIM = 30
+STOCK_DIM = 10
 # transaction fee: 1/1000 reasonable percentage
 TRANSACTION_FEE_PERCENT = 0.001
-REWARD_SCALING = 1e-4
+REWARD_SCALING = 1
 
 class StockEnvTrain(gym.Env):
     """A stock trading environment for OpenAI gym"""
@@ -33,7 +33,7 @@ class StockEnvTrain(gym.Env):
         self.action_space = spaces.Box(low = -1, high = 1,shape = (STOCK_DIM,)) 
         # Shape = 181: [Current Balance]+[prices 1-30]+[owned shares 1-30] 
         # +[macd 1-30]+ [rsi 1-30] + [cci 1-30] + [adx 1-30]
-        self.observation_space = spaces.Box(low=0, high=np.inf, shape = (181,))
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape = (96,))
         # load data from a pandas dataframe
         self.data = self.df.loc[self.day,:]
         self.terminal = False             
@@ -45,6 +45,15 @@ class StockEnvTrain(gym.Env):
                       self.data.rsi.values.tolist() + \
                       self.data.cci.values.tolist() + \
                       self.data.adx.values.tolist()
+        # print(self.state)
+        # print(len(self.state))
+        # print(len(self.data.adx.values.tolist()))
+        # print(len(self.data.cci.values.tolist()))
+        # print(len(self.data.rsi.values.tolist()))
+        # print(len(self.data.macd.values.tolist()))
+        # print(len([0]*STOCK_DIM))
+        # print(len(self.data.adjcp.values.tolist()))
+        # print(len([INITIAL_ACCOUNT_BALANCE]))
         # initialize reward
         self.reward = 0
         self.cost = 0
@@ -58,6 +67,16 @@ class StockEnvTrain(gym.Env):
 
     def _sell_stock(self, index, action):
         # perform sell action based on the sign of the action
+        # print("SELL")
+        # print(self.state)
+        # print(len(self.state))
+        # print(len(self.data.adx.values.tolist()))
+        # print(len(self.data.cci.values.tolist()))
+        # print(len(self.data.rsi.values.tolist()))
+        # print(len(self.data.macd.values.tolist()))
+        # print(len([0]*STOCK_DIM))
+        # print(len(self.data.adjcp.values.tolist()))
+        # print(len([INITIAL_ACCOUNT_BALANCE]))
         if self.state[index+STOCK_DIM+1] > 0:
             #update balance
             self.state[0] += \
@@ -73,6 +92,16 @@ class StockEnvTrain(gym.Env):
 
     
     def _buy_stock(self, index, action):
+        # print("BUY")
+        # print(self.state)
+        # print(len(self.state))
+        # print(len(self.data.adx.values.tolist()))
+        # print(len(self.data.cci.values.tolist()))
+        # print(len(self.data.rsi.values.tolist()))
+        # print(len(self.data.macd.values.tolist()))
+        # print(len([0]*STOCK_DIM))
+        # print(len(self.data.adjcp.values.tolist()))
+        # print(len([INITIAL_ACCOUNT_BALANCE]))
         # perform buy action based on the sign of the action
         available_amount = self.state[0] // self.state[index+1]
         # print('available_amount:{}'.format(available_amount))
@@ -88,6 +117,16 @@ class StockEnvTrain(gym.Env):
         self.trades+=1
         
     def step(self, actions):
+        # print("STEP")
+        # print(self.state)
+        # print(len(self.state))
+        # print(len(self.data.adx.values.tolist()))
+        # print(len(self.data.cci.values.tolist()))
+        # print(len(self.data.rsi.values.tolist()))
+        # print(len(self.data.macd.values.tolist()))
+        # print(len([0]*STOCK_DIM))
+        # print(len(self.data.adjcp.values.tolist()))
+        # print(len([INITIAL_ACCOUNT_BALANCE]))
         # print(self.day)
         self.terminal = self.day >= len(self.df.index.unique())-1
         # print(actions)
@@ -171,6 +210,17 @@ class StockEnvTrain(gym.Env):
         return self.state, self.reward, self.terminal, {}
 
     def reset(self):
+        # print("RESET")
+        # print(self.state)
+        # print(len(self.state))
+        # print(len(self.data.adx.values.tolist()))
+        # print(len(self.data.cci.values.tolist()))
+        # print(len(self.data.rsi.values.tolist()))
+        # print(len(self.data.macd.values.tolist()))
+        # print(len([0]*STOCK_DIM))
+        # print(len(self.data.adjcp.values.tolist()))
+        # print(len([INITIAL_ACCOUNT_BALANCE]))
+
         self.asset_memory = [INITIAL_ACCOUNT_BALANCE]
         self.day = 0
         self.data = self.df.loc[self.day,:]

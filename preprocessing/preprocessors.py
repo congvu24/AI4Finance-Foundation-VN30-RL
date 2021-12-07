@@ -95,7 +95,8 @@ def preprocess_data():
 
     df = load_dataset(file_name=config.TRAINING_DATA_FILE)
     # get data after 2009
-    df = df[df.datadate>=20090000]
+    # df = df[df.datadate>=20090000]
+    df = df[df.datadate>=20160000]
     # calcualte adjusted price
     df_preprocess = calcualte_price(df)
     # add technical indicators using stockstats

@@ -16,7 +16,8 @@ def run_model() -> None:
     """Train the model."""
 
     # read and preprocess data
-    preprocessed_path = "done_data.csv"
+    preprocessed_path = "done_data_vn30.csv"
+    # preprocessed_path = "done_data.csv"
     if os.path.exists(preprocessed_path):
         data = pd.read_csv(preprocessed_path, index_col=0)
     else:
@@ -30,7 +31,13 @@ def run_model() -> None:
     # 2015/10/01 is the date that validation starts
     # 2016/01/01 is the date that real trading starts
     # unique_trade_date needs to start from 2015/10/01 for validation purpose
-    unique_trade_date = data[(data.datadate > 20151001)&(data.datadate <= 20200707)].datadate.unique()
+
+    # 2018/10/01 is date that validation starts
+    # 2019/01/01 is date that real trading starts
+
+    # unique_trade_date = data[(data.datadate > 20151001)&(data.datadate <= 20200707)].datadate.unique()
+    unique_trade_date = data[(data.datadate > 20181001)&(data.datadate <= 20211201)].datadate.unique()
+
     print(unique_trade_date)
 
     # rebalance_window is the number of months to retrain the model
