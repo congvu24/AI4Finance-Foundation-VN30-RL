@@ -10,17 +10,17 @@ import pickle
 
 # shares normalization factor
 # 100 shares per trade
-HMAX_NORMALIZE = 100
+HMAX_NORMALIZE = 1000
 # initial amount of money we have in our account
-INITIAL_ACCOUNT_BALANCE=1000000
+INITIAL_ACCOUNT_BALANCE=1000000000
 # total number of stocks in our portfolio
-STOCK_DIM = 10
+STOCK_DIM = 15
 # transaction fee: 1/1000 reasonable percentage
 TRANSACTION_FEE_PERCENT = 0.001
 
 # turbulence index: 90-150 reasonable threshold
 #TURBULENCE_THRESHOLD = 140
-REWARD_SCALING = 1
+REWARD_SCALING = 1e-10
 
 class StockEnvValidation(gym.Env):
     """A stock trading environment for OpenAI gym"""
@@ -35,7 +35,7 @@ class StockEnvValidation(gym.Env):
         self.action_space = spaces.Box(low = -1, high = 1,shape = (STOCK_DIM,)) 
         # Shape = 181: [Current Balance]+[prices 1-30]+[owned shares 1-30] 
         # +[macd 1-30]+ [rsi 1-30] + [cci 1-30] + [adx 1-30]
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape = (96,))
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape = (101,))
         # load data from a pandas dataframe
         self.data = self.df.loc[self.day,:]
         self.terminal = False     
